@@ -1,11 +1,17 @@
-import React from 'react';
+import React, { useState, useEffect } from "react";
 import ReactAplayer from 'react-aplayer';
+import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from "@azure/msal-react";
+import { loginRequest } from "./authConfig";
+import {PageLayout} from "./components/PageLayout";
+
+
 const {REACT_APP_SONGS} = process.env
 
 // const songs = REACT_APP_SONGS.split(' ');
 
 const App = () => {
-    console.log(REACT_APP_SONGS)
+    const { instance, accounts } = useMsal();
+    // console.log(REACT_APP_SONGS)
     const theme= '#F57F17'
     const lrcType= 3
     const songs = REACT_APP_SONGS.split(' ')
@@ -120,20 +126,31 @@ const App = () => {
             url: songs[i]
         }
     }
+    // instance.acquireTokenSilent({
+    //     ...loginRequest,
+    //     account: accounts[0]
+    // }).then((response) => {
+    //     console.log('access Token')
+    //     console.log(response.accessToken)
+    // });
+
     return (
-        <div>
-            <ReactAplayer
-                lycType={3}
-                loop={'all'}
-                order={'random'}
-                preload={'auto'}
-                volume={0.7}
-                mutex
-                audio={audio}
-                lrcType={lrcType}
-                theme={theme}
-            />
-        </div>
+        <PageLayout>
+            <AuthenticatedTemplate>
+                <ReactAplayer
+                    lycType={3}
+                    loop={'all'}
+                    order={'random'}
+                    preload={'auto'}
+                    volume={0.7}
+                    mutex
+                    audio={audio}
+                    lrcType={lrcType}
+                    theme={theme}
+                />
+            </AuthenticatedTemplate>
+        </PageLayout>
+
     );
 }
 
