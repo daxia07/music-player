@@ -4,6 +4,7 @@
  */
 
 import { LogLevel } from "@azure/msal-browser";
+const { REACT_APP_CLIENT_ID } = process.env;
 
 /**
  * Configuration object to be passed to MSAL instance on creation. 
@@ -12,7 +13,7 @@ import { LogLevel } from "@azure/msal-browser";
  */
 export const msalConfig = {
     auth: {
-        clientId: "18785929-23b9-4f57-a050-9bfe4343b961",
+        clientId: REACT_APP_CLIENT_ID,
         authority: "https://login.microsoftonline.com/consumers",
         redirectUri: "http://localhost:3000/"
     },
