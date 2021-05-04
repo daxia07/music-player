@@ -6,6 +6,7 @@ import { SignOutButton } from "./SignOutButton";
 import { useDispatch, useSelector } from "react-redux";
 import { updateData } from "../actions";
 import axios from "axios";
+import {getSongs} from "../utils/funcs"
 
 
 /**
@@ -45,20 +46,7 @@ export const PageLayout = (props) => {
     useEffect(() => {
         if (!songs.length && accessToken) {
             // fetch data with API
-            const bearer = `Bearer ${accessToken}`
-            const headers = { 
-                'Content-Type': 'application/json', 'Authorization': bearer
-             }
-             // TODO: send token and request song list with API
-             axios.get(graphConfig.graphMeEndpoint, { headers }).then( res => {
-                 const { data: { value } } = res
-                 // singers -> abums -> songs & cover
-                 for (let i=0; i < value.lenth; i++) {
-                     // fetch 
-                 }
-                 console.log(res)
-                 // dispatch data
-             }).catch(err => console.log(err))
+            const fetchedSongs =  getSongs(accessToken)
         } 
     })
 
