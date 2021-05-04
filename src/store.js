@@ -1,4 +1,4 @@
-const reducer = (state={accessToken: "", fetchTokenInProcess: false}, action) => {
+const reducer = (state={accessToken: "", fetchTokenInProcess: false, songs: []}, action) => {
     switch(action.type) {
         case "UPDATE_DATA": {
             const { data: updates } = action

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import ReactAplayer from 'react-aplayer';
 import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from "@azure/msal-react";
-import { loginRequest } from "./authConfig";
-import {PageLayout} from "./components/PageLayout";
+import { loginRequest } from "../utils/authConfig";
+import {PageLayout} from "./PageLayout";
 
 
 const {REACT_APP_SONGS} = process.env

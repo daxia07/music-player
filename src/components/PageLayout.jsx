@@ -1,10 +1,11 @@
 import React, {useEffect} from "react";
 import { useIsAuthenticated } from "@azure/msal-react";
-import { loginRequest } from "../authConfig";
+import { loginRequest, graphConfig } from "../utils/authConfig";
 import { useMsal } from "@azure/msal-react";
 import { SignOutButton } from "./SignOutButton";
 import { useDispatch, useSelector } from "react-redux";
 import { updateData } from "../actions";
+import axios from "axios";
 
 
 /**
@@ -17,7 +18,7 @@ export const PageLayout = (props) => {
     const isAuthenticated = useIsAuthenticated()
     const content = useSelector(state => state)
     const dispatch = useDispatch();
-    const { accessToken, fetchTokenInProcess } = content
+    const { accessToken, fetchTokenInProcess, songs } = content
     
     useEffect(() => {
         if (!isAuthenticated && !fetchTokenInProcess) {
@@ -39,6 +40,26 @@ export const PageLayout = (props) => {
             }).catch(err => console.log(err));
             dispatch(updateData({fetchTokenInProcess: true}))
         }
+    })
+
+    useEffect(() => {
+        if (!songs.length && accessToken) {
+            // fetch data with API
+            const bearer = `Bearer ${accessToken}`
+            const headers = { 
+                'Content-Type': 'application/json', 'Authorization': bearer
+             }
+             // TODO: send token and request song list with API
+             axios.get(graphConfig.graphMeEndpoint, { headers }).then( res => {
+                 const { data: { value } } = res
+                 // singers -> abums -> songs & cover
+                 for (let i=0; i < value.lenth; i++) {
+                     // fetch 
+                 }
+                 console.log(res)
+                 // dispatch data
+             }).catch(err => console.log(err))
+        } 
     })
 
     return (

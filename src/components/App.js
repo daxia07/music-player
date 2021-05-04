@@ -1,5 +1,5 @@
 import React from "react";
-import {PageLayout} from "./components/PageLayout";
+import {PageLayout} from "./PageLayout";
 import { AuthenticatedTemplate } from "@azure/msal-react";
 import { useDispatch, useSelector } from "react-redux";
 
