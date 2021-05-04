@@ -38,7 +38,9 @@ export const msalConfig = {
                         return;		
                     case LogLevel.Warning:		
                         console.warn(message);		
-                        return;		
+                        return;	
+                    default:
+                        console.log('Default')	
                 }	
             }	
         }	
@@ -52,9 +54,7 @@ export const msalConfig = {
  * https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-permissions-and-consent#openid-connect-scopes
  */
 export const loginRequest = {
-    scopes: ["User.Read",
-    "offline_access",
-    "Files.ReadWrite"]
+    scopes: ["User.Read", "offline_access", "Files.ReadWrite"]
 };
 
 /**

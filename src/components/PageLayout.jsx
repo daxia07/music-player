@@ -1,13 +1,8 @@
-/*
- * Copyright (c) Microsoft Corporation. All rights reserved.
- * Licensed under the MIT License.
- */
-
-import React from "react";
+import React, {useEffect} from "react";
 import Navbar from "react-bootstrap/Navbar";
-
 import { useIsAuthenticated } from "@azure/msal-react";
-import { SignInButton } from "./SignInButton";
+import { loginRequest } from "../authConfig";
+import { useMsal } from "@azure/msal-react";
 import { SignOutButton } from "./SignOutButton";
 
 /**
@@ -15,17 +10,22 @@ import { SignOutButton } from "./SignOutButton";
  * @param props 
  */
 export const PageLayout = (props) => {
+    // Redirect to auth page if not authenticated by force
+    const { instance } = useMsal();
     const isAuthenticated = useIsAuthenticated();
+    useEffect(() => {
+        if (!isAuthenticated) {
+            instance.loginRedirect(loginRequest).catch(e => {
+                console.log(e);
+            });
+        }
+    }, [isAuthenticated, instance])
 
     return (
         <>
             <Navbar bg="primary" variant="dark">
-                <a className="navbar-brand" href="/">Microsoft Identity Platform</a>
-                { isAuthenticated ? <SignOutButton /> : <SignInButton /> }
+                { isAuthenticated ? <SignOutButton /> : <div/> }
             </Navbar>
-            <h5><center>Welcome to the Microsoft Authentication Library For Javascript - React Quickstart</center></h5>
-            <br />
-            <br />
             {props.children}
         </>
     );
