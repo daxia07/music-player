@@ -1,11 +1,10 @@
 import React, {useEffect} from "react";
 import { useIsAuthenticated } from "@azure/msal-react";
-import { loginRequest, graphConfig } from "../utils/authConfig";
+import { loginRequest } from "../utils/authConfig";
 import { useMsal } from "@azure/msal-react";
 import { SignOutButton } from "./SignOutButton";
 import { useDispatch, useSelector } from "react-redux";
 import { updateData } from "../actions";
-import axios from "axios";
 import {getSongs} from "../utils/funcs"
 
 
@@ -47,6 +46,8 @@ export const PageLayout = (props) => {
         if (!songs.length && accessToken) {
             // fetch data with API
             const fetchedSongs =  getSongs(accessToken)
+            console.log(fetchedSongs)
+            //TODO: dispatch to store
         } 
     })
 
