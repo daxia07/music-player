@@ -1,12 +1,13 @@
 import React from "react";
 import {PageLayout} from "./components/PageLayout";
-import { AuthenticatedTemplate, useMsal } from "@azure/msal-react";
+import { AuthenticatedTemplate } from "@azure/msal-react";
+import { useDispatch, useSelector } from "react-redux";
 
 
 const App = () => {
-    const { instance, accounts } = useMsal();
-    console.log(accounts)
-    console.log(instance)
+    const content = useSelector(state => state);
+    console.log(content)
+    const dispatch = useDispatch();
     return  ( 
         <PageLayout>
             <AuthenticatedTemplate>

@@ -1,9 +1,11 @@
 import React, {useEffect} from "react";
-import Navbar from "react-bootstrap/Navbar";
 import { useIsAuthenticated } from "@azure/msal-react";
 import { loginRequest } from "../authConfig";
 import { useMsal } from "@azure/msal-react";
 import { SignOutButton } from "./SignOutButton";
+import { useDispatch, useSelector } from "react-redux";
+import { updateData } from "../actions";
+
 
 /**
  * Renders the navbar component with a sign-in or sign-out button depending on whether or not a user is authenticated
@@ -11,21 +13,37 @@ import { SignOutButton } from "./SignOutButton";
  */
 export const PageLayout = (props) => {
     // Redirect to auth page if not authenticated by force
-    const { instance } = useMsal();
-    const isAuthenticated = useIsAuthenticated();
+    const { instance, accounts } = useMsal()
+    const isAuthenticated = useIsAuthenticated()
+    const content = useSelector(state => state)
+    const dispatch = useDispatch();
+    const { accessToken, fetchTokenInProcess } = content
+    
     useEffect(() => {
-        if (!isAuthenticated) {
+        if (!isAuthenticated && !fetchTokenInProcess) {
             instance.loginRedirect(loginRequest).catch(e => {
                 console.log(e);
             });
+        } 
+    }, [isAuthenticated, instance, fetchTokenInProcess])
+    
+    useEffect(() => {
+        if (isAuthenticated && !accessToken && !fetchTokenInProcess) {
+            instance.acquireTokenSilent({
+                ...loginRequest,
+                account: accounts[0]
+            }).then((response) => {
+                console.log('access Token')
+                console.log(response.accessToken)
+                dispatch(updateData({accessToken: response.accessToken, fetchTokenInProcess:false}))
+            }).catch(err => console.log(err));
+            dispatch(updateData({fetchTokenInProcess: true}))
         }
-    }, [isAuthenticated, instance])
+    })
 
     return (
         <>
-            <Navbar bg="primary" variant="dark">
-                { isAuthenticated ? <SignOutButton /> : <div/> }
-            </Navbar>
+            { isAuthenticated ? <SignOutButton /> : <div/> }
             {props.children}
         </>
     );
