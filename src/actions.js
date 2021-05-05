@@ -46,6 +46,12 @@ export const fetchToken = (instance, accounts, loginRequest) => {
 export const fetchSongs = accessToken => {
     // console.log(`Fetching data for page ${page}`)
     return dispatch => {
+        dispatch({
+            type: "UPDATE_DATA",
+            data: {
+                fetchSongsInProcess: true
+            }
+        })
         getSongs(accessToken).then( songs => {
             dispatch({
                 type: "UPDATE_DATA",
