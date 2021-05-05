@@ -4,7 +4,7 @@
  */
 
 import { LogLevel } from "@azure/msal-browser";
-const { REACT_APP_CLIENT_ID } = process.env;
+const { REACT_APP_CLIENT_ID, REACT_APP_CALLBACK_URI } = process.env;
 
 /**
  * Configuration object to be passed to MSAL instance on creation. 
@@ -15,7 +15,7 @@ export const msalConfig = {
     auth: {
         clientId: REACT_APP_CLIENT_ID,
         authority: "https://login.microsoftonline.com/consumers",
-        redirectUri: "http://localhost:3000/"
+        redirectUri: REACT_APP_CALLBACK_URI
     },
     cache: {
         cacheLocation: "sessionStorage", // This configures where your cache will be stored
