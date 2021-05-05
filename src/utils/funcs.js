@@ -28,7 +28,7 @@ export const getSongs = async (accessToken) => {
                 // TODO: query cover
                 const coverReturn = await axios.get(graphConfig.graphMeItemsEndpoint + `${albumId}/children?$filter=startsWith(name,'cover.')`, {headers})
                 const {data: {value: covers=[{}]} } = coverReturn
-                const {id: coverId=undefined} = covers[0]
+                let coverId = covers.length ? covers[0].id : undefined
                 let coverUrl = ""
                 if (coverId) {
                     const coverLinkReturn = await axios.post(graphConfig.graphMeItemsEndpoint + `${coverId}/createLink`, {
