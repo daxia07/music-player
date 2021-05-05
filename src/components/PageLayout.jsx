@@ -2,11 +2,8 @@ import React, {useEffect} from "react";
 import { useIsAuthenticated } from "@azure/msal-react";
 import { loginRequest } from "../utils/authConfig";
 import { useMsal } from "@azure/msal-react";
-import { SignOutButton } from "./SignOutButton";
 import { useDispatch, useSelector } from "react-redux";
-import { updateData } from "../actions";
-import {getSongs} from "../utils/funcs"
-
+import { fetchToken } from "../actions";
 
 /**
  * Renders the navbar component with a sign-in or sign-out button depending on whether or not a user is authenticated
@@ -18,7 +15,7 @@ export const PageLayout = (props) => {
     const isAuthenticated = useIsAuthenticated()
     const content = useSelector(state => state)
     const dispatch = useDispatch();
-    const { accessToken, fetchTokenInProcess, songs } = content
+    const { accessToken, fetchTokenInProcess } = content
     
     useEffect(() => {
         if (!isAuthenticated && !fetchTokenInProcess) {
@@ -30,30 +27,13 @@ export const PageLayout = (props) => {
     
     useEffect(() => {
         if (isAuthenticated && !accessToken && !fetchTokenInProcess) {
-            instance.acquireTokenSilent({
-                ...loginRequest,
-                account: accounts[0]
-            }).then((response) => {
-                console.log('access Token')
-                console.log(response.accessToken)
-                dispatch(updateData({accessToken: response.accessToken, fetchTokenInProcess:false}))
-            }).catch(err => console.log(err));
-            dispatch(updateData({fetchTokenInProcess: true}))
+            dispatch(fetchToken(instance, accounts, loginRequest))
         }
-    })
-
-    useEffect(() => {
-        if (!songs.length && accessToken) {
-            // fetch data with API
-            const fetchedSongs =  getSongs(accessToken)
-            console.log(fetchedSongs)
-            //TODO: dispatch to store
-        } 
     })
 
     return (
         <>
-            { isAuthenticated ? <SignOutButton /> : <div/> }
+            {/*{ isAuthenticated ? <SignOutButton /> : <div/> }*/}
             {props.children}
         </>
     );

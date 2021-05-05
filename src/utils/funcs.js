@@ -6,7 +6,7 @@ export const getSongs = async (accessToken) => {
     const headers = { 
         'Content-Type': 'application/json', 'Authorization': bearer
      }
-     const data = {}
+     const data = []
      try {
         let res = await axios.get(graphConfig.graphMeEndpoint, { headers })
         const { data: { value } } = res
@@ -26,9 +26,24 @@ export const getSongs = async (accessToken) => {
                 const songsReturn = await axios.get(graphConfig.graphMeItemsEndpoint + `${albumId}/children`, { headers })
                 // create link and identify cover
                 // TODO: query cover
+                const coverReturn = await axios.get(graphConfig.graphMeItemsEndpoint + `${albumId}/children?$filter=startsWith(name,'cover.')`, {headers})
+                const {data: {value: covers=[{}]} } = coverReturn
+                const {id: coverId=undefined} = covers[0]
+                let coverUrl = ""
+                if (coverId) {
+                    const coverLinkReturn = await axios.post(graphConfig.graphMeItemsEndpoint + `${coverId}/createLink`, {
+                        "type": "embed",
+                        "scope": "anonymous"
+                    }, {headers})
+                    let { data: { link: {webUrl: coverLink} }} = coverLinkReturn
+                    coverUrl = coverLink.replace('/embed?', '/download?')
+                }
                 const { data: { value: songs} } = songsReturn
                 for (let i=0; i< songs.length; i++) {
                     const {name: song, id: songId} = songs[i]
+                    if (songId === coverId) {
+                        continue
+                    }
                     console.log(song)
                     const linkReturn = await axios.post(graphConfig.graphMeItemsEndpoint + `${songId}/createLink`, {
                         "type": "embed",
@@ -40,12 +55,13 @@ export const getSongs = async (accessToken) => {
                     const entry = {
                         singer,
                         album,
-                        song,
-                        webUrl
+                        name: song,
+                        musicSrc: webUrl,
+                        cover: coverUrl
                     }
+                    data.push(entry)
                     console.log(entry)
                 }
-                console.log(songs)
             }
         }
         console.log(res)
