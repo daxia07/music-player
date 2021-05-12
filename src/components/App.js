@@ -2,6 +2,7 @@ import React from "react";
 import {PageLayout} from "./PageLayout";
 import { AuthenticatedTemplate } from "@azure/msal-react";
 import { useDispatch, useSelector } from "react-redux";
+import MusicPlayer from "./MusicPlayer";
 
 
 const App = () => {
@@ -11,7 +12,7 @@ const App = () => {
     return  ( 
         <PageLayout>
             <AuthenticatedTemplate>
-                Hi
+                <MusicPlayer/>
             </AuthenticatedTemplate>
     </PageLayout>
 )}
