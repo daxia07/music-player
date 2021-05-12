@@ -14,10 +14,11 @@ export const getSongs = async (accessToken) => {
         // singers -> abums -> songs & cover
         for (let i=0; i < value.length; i++) {
             // fetch singers
-            let singer = value[i].name
-            // fetch abums
+            const { name: singer, id } = value[i]
+            // fetch albums
+            let ablumsRet = await axios.get(graphConfig.graphMeItemsEndpoint + id + `/children`, { headers })
             console.log(value[i])
-            //fetch ablumns
+            
             //fetch songs
         }
         console.log(res)
