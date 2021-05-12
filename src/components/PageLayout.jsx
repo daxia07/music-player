@@ -4,6 +4,7 @@ import { loginRequest } from "../utils/authConfig";
 import { useMsal } from "@azure/msal-react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchToken } from "../actions";
+import {SignOutButton} from "./SignOutButton";
 
 /**
  * Renders the navbar component with a sign-in or sign-out button depending on whether or not a user is authenticated
@@ -33,7 +34,7 @@ export const PageLayout = (props) => {
 
     return (
         <>
-            {/*{ isAuthenticated ? <SignOutButton /> : <div/> }*/}
+            { isAuthenticated ? <SignOutButton /> : <div/> }
             {props.children}
         </>
     );
