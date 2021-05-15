@@ -7,10 +7,8 @@ import {fetchSongs} from "../actions";
 const MusicPlayer = () => {
     const content = useSelector(state => state)
     const {songs, fetchSongsInProcess, accessToken } = content
-    const dispatch = useDispatch();
-
+    const dispatch = useDispatch()
     useEffect(() => {
-        // songs fetchInProcess
         if (!songs.length && !fetchSongsInProcess && accessToken) {
             // fetch songs and mark as in process
             // TODO: fetch lyrics
