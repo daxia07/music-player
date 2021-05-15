@@ -1,16 +1,13 @@
 import React from "react";
 import {PageLayout} from "./PageLayout";
-import { AuthenticatedTemplate } from "@azure/msal-react";
 import MusicPlayer from "./MusicPlayer";
 
 
 const App = () => {
-    return  ( 
+    return  (
         <PageLayout>
-            <AuthenticatedTemplate>
-                <MusicPlayer/>
-            </AuthenticatedTemplate>
-    </PageLayout>
+            <MusicPlayer/>
+        </PageLayout>
 )}
 
 export default App

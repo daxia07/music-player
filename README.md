@@ -1,70 +1,51 @@
-# Getting Started with Create React App
+## Google oauth2
+### refresh token from backend
+Topic: https://stackoverflow.com/questions/19766912/how-do-i-authorise-an-app-web-or-installed-without-user-intervention
+### Oauth2 playground
+Workflow:
+1. Authorize API (client side)
+2. Exchange auth code for tokens
+3. Send refresh token to the backend 
+4. Configure request for API
+### Oauth2 API
+1. get refresh token status by calling API
+2. get new refresh token if necessary and post to API
+3. get cached playlist
+4. scan for new songs or changes
+### packages
+react-use-googlelogin
+isSingedIn to replace isAuthenticated
+signIn/signOut to replace MS buttons
+grantOfflineAccess to fetch refresh token
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+POST /token HTTP/1.1
+Host: oauth2.googleapis.com
+Content-length: 261
+content-type: application/x-www-form-urlencoded
+user-agent: google-oauth-playground
+code=4%2F0AY0e-g7pSK7cI6nd9VCpT-iynTxA0u89qFvm7OHSiErETl_lpiIde8iMIDM9in156lHirg&redirect_uri=https%3A%2F%2Fdevelopers.google.com%2Foauthplayground&client_id=407408718192.apps.googleusercontent.com&client_secret=************&scope=&grant_type=authorization_code
 
-## Available Scripts
+### Issues
+Not working for Chrome private mode
 
-In the project directory, you can run:
-
-### `yarn start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `yarn test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `yarn build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### request refresh token
+```javascript
+const handleRequest = async () => {
+        const code =  await grantOfflineAccess()
+        console.log(code)
+        const params = new URLSearchParams()
+        params.append('code', urlencode(code))
+        params.append('client_id', urlencode(process.env.REACT_APP_GOOGLE_CLIENT_ID))
+        params.append('client_secret', urlencode(process.env.REACT_APP_GOOGLE_CLIENT_SECRET))
+        params.append('scope', '')
+        params.append('grant_type', 'authorization_code')
+        params.append('redirect_uri', urlencode('http://localhost:3000'))
+        const res = await axios.post('https://oauth2.googleapis.com', {}, {
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        })
+        console.log(res)
+    }
+```
+    
