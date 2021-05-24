@@ -1,5 +1,5 @@
 // import axios from "axios";
-import {getCachedSongs} from "./utils/funcs";
+import {getSongs} from "./utils/funcs";
 
 // const { REACT_APP_API_URI, REACT_APP_PAGE_LIMIT } = process.env;
 
@@ -53,7 +53,7 @@ export const fetchSongs = accessToken => {
             }
         })
         // TODO: update list with the updated list
-        getCachedSongs().then( songs => {
+        getSongs().then(songs => {
             dispatch({
                 type: "UPDATE_DATA",
                 data: {

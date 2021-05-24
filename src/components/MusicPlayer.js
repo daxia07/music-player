@@ -9,7 +9,7 @@ const MusicPlayer = () => {
     const {songs, fetchSongsInProcess, accessToken } = content
     const dispatch = useDispatch()
     useEffect(() => {
-        if (!songs.length && !fetchSongsInProcess && accessToken) {
+        if (!songs.length && !fetchSongsInProcess && !!accessToken) {
             // fetch songs and mark as in process
             // TODO: fetch lyrics
             dispatch(fetchSongs(accessToken))
